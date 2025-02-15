@@ -30,9 +30,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ Fix: Defined configuration source method
+            .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/login", "/users/register", "/users/verifyOtp/**", "/users/sendOtp/**").permitAll()
+                .requestMatchers("/jobs/getAll", "/hackathons/getAll").permitAll() // ✅ Public access to jobs & hackathons
                 .anyRequest().authenticated()
             )
             .exceptionHandling(ex -> ex.authenticationEntryPoint(point))
@@ -54,7 +55,6 @@ public class SecurityConfig {
         return source;
     }
 }
-
 
 
 //package com.stemlen;
